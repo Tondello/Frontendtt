@@ -6,8 +6,11 @@
 .redes{
     margin-right: 0.5em;
 }
-#Aplogo{
-    width: 60px;
+#APlogo{
+    width: 160px;
+}
+img{
+    width: 30px;
 }
 .btn{
     border-width: medium;
