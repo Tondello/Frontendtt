@@ -1,4 +1,8 @@
-// usa la clase del provider para validar el token otra vez y se ejecuta cada vez q hacemos una modificacion por ej 
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.example.tomas.Security.jwt;
 
 import com.example.tomas.Security.Service.UserDetailsImpl;
@@ -26,30 +30,29 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Autowired
     JwtProvider jwtProvider;
     @Autowired
-    UserDetailsImpl userDetailServiceImpl;
+    UserDetailsImpl userDetailsServiceImpl;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             String token = getToken(request);
             if (token != null && jwtProvider.validateToken(token)) {
-                String nombreUsuario = jwtProvider.getNombreUsuarioFromToken(token);
-                UserDetails userDetails = userDetailServiceImpl.loadUserByUsername(nombreUsuario);
+                String nombreUsuario = jwtProvider.getNombreUSuarioFromToken(token);
+                UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(nombreUsuario);
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails,
                         null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         } catch (Exception e) {
-            logger.error("Falló el metodo doFilterInternal");
+            logger.error("Fallí el metodo doFilterInternal");
         }
         filterChain.doFilter(request, response);
     }
-
-    private String getToken(HttpServletRequest request) {
-        String header = request.getHeader("Autorization");
-        if (header != null && header.startsWith("Bearer")) {
+    
+    private String getToken(HttpServletRequest request){
+        String header = request.getHeader("Authorization");
+        if(header != null && header.startsWith("Bearer"))
             return header.replace("Bearer", "");
-        }
         return null;
     }
 }

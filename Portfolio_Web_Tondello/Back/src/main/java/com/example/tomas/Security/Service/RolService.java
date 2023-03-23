@@ -4,26 +4,21 @@ import com.example.tomas.Security.Entity.Rol;
 import com.example.tomas.Security.Enums.RolNombre;
 import com.example.tomas.Security.Repository.iRolRepository;
 import java.util.Optional;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
 public class RolService {
-
     @Autowired
     iRolRepository irolRepository;
-
-    public Optional<Rol> getbyRolNombre(RolNombre rolNombre) {
+    
+    public Optional<Rol> getbyRolNombre(RolNombre rolNombre){
         return irolRepository.findByRolNombre(rolNombre);
     }
-
-    public void save(Rol rol) {
+    
+    public void save(Rol rol){
         irolRepository.save(rol);
-    }
-
-    public Object getByRolNombre(RolNombre rolNombre) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

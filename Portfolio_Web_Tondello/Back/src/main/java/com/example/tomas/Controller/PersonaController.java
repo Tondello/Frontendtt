@@ -11,52 +11,45 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("personas")
 public class PersonaController {
 
     @Autowired
-    ImpPersonaService personaService;
+    ImpPersonaService impPersonaService;
 
     @GetMapping("personas/traer")
     public List<Persona> getPersona() {
-        return personaService.getPersona();
+        return impPersonaService.getPersona();
     }
 
-   @PostMapping("/crear")
     @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/personas/crear")
     public String createPersona(@RequestBody Persona persona) {
-        personaService.savePersona(persona);
+        impPersonaService.savePersona(persona);
         return "La persona fue creada correctamente";
     }
 
-
-    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/personas/borrar/{id}")
     public String deletePersona(@PathVariable Long id) {
-        personaService.deletePersona(id);
+        impPersonaService.deletePersona(id);
         return "La persona fue eliminada correctamente";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/persona/editar/{id}")
+    @PutMapping("/personas/editar/{id}")
     public Persona editPersona(@PathVariable Long id,
             @RequestParam("nombre") String nuevoNombre,
             @RequestParam("apellido") String nuevoApellido,
             @RequestParam("img") String nuevoImg) {
-
-        Persona persona = personaService.findPersona(id);
+        Persona persona = impPersonaService.findPersona(id);
 
         persona.setNombre(nuevoNombre);
         persona.setApellido(nuevoApellido);
         persona.setImg(nuevoImg);
 
-        personaService.savePersona(persona);
+        impPersonaService.savePersona(persona);
         return persona;
-
     }
 }
